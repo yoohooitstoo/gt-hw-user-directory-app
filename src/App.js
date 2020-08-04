@@ -6,18 +6,15 @@ class App extends Component {
   state = {
     search: "",
     employees: [],
-    filterEmployees: [],
-    // error: ""
   };
 
   componentDidMount() {
     Axios.get("https://randomuser.me/api/?results=500").then((res) =>
       this.setState({
         employees: res.data.results,
-        // sortEmployees: res.data.results,
+        
       })
     );
-    // console.log(this.state.employees);
     this.sortEmployeesByName();
     this.sortEmployeesByPhone();
     this.sortEmployeesByEmail();
@@ -26,8 +23,6 @@ class App extends Component {
 
   sortEmployeesByName = () => {
     function compare(a, b) {
-      // console.log("A: ", a);
-      // console.log("B: ", b);
       if (a.name.first > b.name.first) return 1;
       if (b.name.first > a.name.first) return -1;
       return 0;
@@ -39,8 +34,6 @@ class App extends Component {
 
   sortEmployeesByPhone  = () => {
     function compare(a, b) {
-      // console.log("A: ", a);
-      // console.log("B: ", b);
       if (a.cell > b.cell) return 1;
       if (b.cell > a.cell) return -1;
       return 0;
@@ -52,8 +45,6 @@ class App extends Component {
 
   sortEmployeesByEmail  = () => {
     function compare(a, b) {
-      // console.log("A: ", a);
-      // console.log("B: ", b);
       if (a.email > b.email) return 1;
       if (b.email > a.email) return -1;
       return 0;
@@ -65,8 +56,6 @@ class App extends Component {
 
   sortEmployeesByAge  = () => {
     function compare(a, b) {
-      // console.log("A: ", a);
-      // console.log("B: ", b);
       if (a.dob.age > b.dob.age) return 1;
       if (b.dob.age > a.dob.age) return -1;
       return 0;
@@ -75,28 +64,21 @@ class App extends Component {
 
     this.setState({ employees: sortedEmployees });
   };
-  // handleSearch = (e) => {
-  //   // const searchValue = this.state.search;
-  //   const filteredEmpArray = this.state.employees.filter((employee) => {
-  //     return (
-  //       employee.name.first
-  //         .toLowerCase()
-  //         .indexOf(e.target.value.toLowerCase()) !== -1
-  //     );
-  //   });
-  //   this.setState({ filterEmployees: filteredEmpArray });
-  // };
 
-  // handleInputChange = event => {
-  //   // Getting the value and name of the input which triggered the change
-  //   const { name, value } = event.target;
+  handleInputChange = (event) => {
+    const searchValue = event.currentTarget.value;
+    console.log(searchValue);
+    this.setState({search: event.currentTarget.value});
+    const searchEmpArray = this.state.employees.filter((user=>{
+      console.log("user", Object.values(user));
+      let results = Object.values(user).join("").toLowerCase();
+      return results.indexOf(searchValue.toLowerCase()) !== -1;
+    }));
+    
+    this.setState({ employees: searchEmpArray });
+  };
 
-  //   // Updating the input's state
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // };
-
+  
   render() {
     return (
       <div>
@@ -107,14 +89,13 @@ class App extends Component {
             Click on the heading to filter by the heading or use the search box
             to narow your results.
           </p>
-          {/* <input
+          <input
             name="search"
             type="text"
             value={this.state.search}
             onChange={this.handleInputChange}
-            onClick={this.handleSearch}
             placeholder="search by name"
-          ></input> */}
+          ></input>
         </div>
         <table className="table table-striped">
           <thead className="thead-dark">
