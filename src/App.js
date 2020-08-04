@@ -14,12 +14,14 @@ class App extends Component {
     Axios.get("https://randomuser.me/api/?results=500").then((res) =>
       this.setState({
         employees: res.data.results,
-        sortEmployees: res.data.results,
+        // sortEmployees: res.data.results,
       })
     );
     // console.log(this.state.employees);
     this.sortEmployeesByName();
     this.sortEmployeesByPhone();
+    this.sortEmployeesByEmail();
+    this.sortEmployeesByAge();
   }
 
   sortEmployeesByName = () => {
@@ -48,7 +50,31 @@ class App extends Component {
     this.setState({ employees: sortedEmployees });
   };
 
-  
+  sortEmployeesByEmail  = () => {
+    function compare(a, b) {
+      // console.log("A: ", a);
+      // console.log("B: ", b);
+      if (a.email > b.email) return 1;
+      if (b.email > a.email) return -1;
+      return 0;
+    }
+    const sortedEmployees = this.state.employees.sort(compare);
+
+    this.setState({ employees: sortedEmployees });
+  };
+
+  sortEmployeesByAge  = () => {
+    function compare(a, b) {
+      // console.log("A: ", a);
+      // console.log("B: ", b);
+      if (a.dob.age > b.dob.age) return 1;
+      if (b.dob.age > a.dob.age) return -1;
+      return 0;
+    }
+    const sortedEmployees = this.state.employees.sort(compare);
+
+    this.setState({ employees: sortedEmployees });
+  };
   // handleSearch = (e) => {
   //   // const searchValue = this.state.search;
   //   const filteredEmpArray = this.state.employees.filter((employee) => {
@@ -104,12 +130,12 @@ class App extends Component {
                   Phone
                 </button>
               </th>
-              <th scope="col">
+              <th scope="col" onClick={this.sortEmployeesByEmail}>
                 <button type="button" className="btn btn-outline-light">
                   Email
                 </button>
               </th>
-              <th scope="col">
+              <th scope="col" onClick={this.sortEmployeesByAge}>
                 <button type="button" className="btn btn-outline-light">
                   Age
                 </button>
