@@ -11,13 +11,27 @@ class App extends Component {
   };
 
   componentDidMount() {
-    Axios.get("https://randomuser.me/api/?results=100").then((res) =>
+    Axios.get("https://randomuser.me/api/?results=500").then((res) =>
       this.setState({
         employees: res.data.results,
-        filterEmployees: res.data.results,
       })
     );
+    console.log(this.state.employees);
+    this.sortEmployees();
   }
+
+  sortEmployees = () => {
+    function compare(a, b) {
+      console.log("A: ", a);
+      console.log("B: ", b);
+      if (a.employees.name.first > b.employees.name.first) return 1;
+      if (b.employees.name.first > a.employees.name.first) return -1;
+      return 0;
+    }
+    const sortedEmployees = this.state.employees.sort(compare);
+
+    this.setState({ sortedEmployees });
+  };
 
   // handleSearch = (e) => {
   //   // const searchValue = this.state.search;
@@ -31,20 +45,17 @@ class App extends Component {
   //   this.setState({ filterEmployees: filteredEmpArray });
   // };
 
+  // handleInputChange = event => {
+  //   // Getting the value and name of the input which triggered the change
+  //   const { name, value } = event.target;
+
+  //   // Updating the input's state
+  //   this.setState({
+  //     [name]: value
+  //   });
+  // };
+
   render() {
-    const ListOfEmp = this.state.employees.map((employee) => (
-      <tr>
-        <td>
-          <img src={employee.picture.thumbnail} alt="employee headshot" />
-        </td>
-        <td>
-          {employee.name.first} {employee.name.last}
-        </td>
-        <td>{employee.cell}</td>
-        <td>{employee.email}</td>
-        <td>{employee.dob.age}</td>
-      </tr>
-    ));
     return (
       <div>
         <div className="jumbotron jumbotron-fluid text-center bg-primary text-white">
@@ -54,21 +65,61 @@ class App extends Component {
             Click on the heading to filter by the heading or use the search box
             to narow your results.
           </p>
-          <input
+          {/* <input
+            name="search"
             type="text"
             value={this.state.search}
-            onChange={this.handleSearch}
-          ></input>
+            onChange={this.handleInputChange}
+            onClick={this.handleSearch}
+            placeholder="search by name"
+          ></input> */}
         </div>
         <table className="table table-striped">
-          <tr>
-            <th scope="col">Image</th>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Age</th>
-          </tr>
-          <tbody>{ListOfEmp}</tbody>
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">
+                  Employee
+              </th>
+              <th scope="col" onClick={this.sortEmployees}>
+                <button type="button" className="btn btn-outline-light">
+                  Name
+                </button>
+              </th>
+              <th scope="col">
+                <button type="button" className="btn btn-outline-light">
+                  Phone
+                </button>
+              </th>
+              <th scope="col">
+                <button type="button" className="btn btn-outline-light">
+                  Email
+                </button>
+              </th>
+              <th scope="col">
+                <button type="button" className="btn btn-outline-light">
+                  Age
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.employees.map((employee) => (
+              <tr>
+                <td>
+                  <img
+                    src={employee.picture.thumbnail}
+                    alt="employee headshot"
+                  />
+                </td>
+                <td>
+                  {employee.name.first} {employee.name.last}
+                </td>
+                <td>{employee.cell}</td>
+                <td>{employee.email}</td>
+                <td>{employee.dob.age}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     );
