@@ -22,9 +22,9 @@
 
 The user will be able to view their entire employee directory at once so that I have quick access to their information. An employee or manager would benefit greatly from being able to view non-sensitive data about other employees. It would be particularly helpful to be able to filter employees by name. The user should be able to:
 
-  * Sort the table by at least one category
+  * Sort the table by name, phone #, email, or age.
 
-  * Filter the users by at least one property.
+  * Search the table by name.
 
 The following screenshot demonstrates the application functionality:
 
