@@ -14,25 +14,41 @@ class App extends Component {
     Axios.get("https://randomuser.me/api/?results=500").then((res) =>
       this.setState({
         employees: res.data.results,
+        sortEmployees: res.data.results,
       })
     );
-    console.log(this.state.employees);
-    this.sortEmployees();
+    // console.log(this.state.employees);
+    this.sortEmployeesByName();
+    this.sortEmployeesByPhone();
   }
 
-  sortEmployees = () => {
+  sortEmployeesByName = () => {
     function compare(a, b) {
-      console.log("A: ", a);
-      console.log("B: ", b);
-      if (a.employees.name.first > b.employees.name.first) return 1;
-      if (b.employees.name.first > a.employees.name.first) return -1;
+      // console.log("A: ", a);
+      // console.log("B: ", b);
+      if (a.name.first > b.name.first) return 1;
+      if (b.name.first > a.name.first) return -1;
       return 0;
     }
     const sortedEmployees = this.state.employees.sort(compare);
 
-    this.setState({ sortedEmployees });
+    this.setState({ employees: sortedEmployees });
   };
 
+  sortEmployeesByPhone  = () => {
+    function compare(a, b) {
+      // console.log("A: ", a);
+      // console.log("B: ", b);
+      if (a.cell > b.cell) return 1;
+      if (b.cell > a.cell) return -1;
+      return 0;
+    }
+    const sortedEmployees = this.state.employees.sort(compare);
+
+    this.setState({ employees: sortedEmployees });
+  };
+
+  
   // handleSearch = (e) => {
   //   // const searchValue = this.state.search;
   //   const filteredEmpArray = this.state.employees.filter((employee) => {
@@ -77,15 +93,13 @@ class App extends Component {
         <table className="table table-striped">
           <thead className="thead-dark">
             <tr>
-              <th scope="col">
-                  Employee
-              </th>
-              <th scope="col" onClick={this.sortEmployees}>
+              <th scope="col">Employee</th>
+              <th scope="col" onClick={this.sortEmployeesByName}>
                 <button type="button" className="btn btn-outline-light">
                   Name
                 </button>
               </th>
-              <th scope="col">
+              <th scope="col" onClick={this.sortEmployeesByPhone}>
                 <button type="button" className="btn btn-outline-light">
                   Phone
                 </button>
